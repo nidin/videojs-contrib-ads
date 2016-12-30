@@ -14,7 +14,8 @@ const cancelContentPlay = function(player) {
   }
 
   // Avoid content flash on non-iPad iOS and iPhones on iOS10 with playsinline
-  if ((videojs.browser.IS_IOS && videojs.browser.IS_IPHONE) && !player.el_.hasAttribute('playsinline')) {
+  if ((videojs.browser.IS_IOS && videojs.browser.IS_IPHONE) &&
+      !player.el_.hasAttribute('playsinline')) {
 
     const width = player.currentWidth ? player.currentWidth() : player.width();
     const height = player.currentHeight ? player.currentHeight() : player.height();
@@ -32,7 +33,7 @@ const cancelContentPlay = function(player) {
     player.el_.style.display = 'none';
 
     // Unhide the player and remove the placeholder once we're ready to move on.
-    player.one(['adstart', 'adplaying', 'adtimeout', 'adserror', 'adscanceled', 'adskip',
+    player.one(['adstart', 'adtimeout', 'adserror', 'adscanceled', 'adskip',
                 'playing'], function() {
       player.el_.style.display = 'block';
       placeholder.remove();
@@ -41,11 +42,11 @@ const cancelContentPlay = function(player) {
     // Detect fullscreen change, if returning from fullscreen and placeholder exists,
     // remove placeholder and show player whether or not playsinline was attached.
     player.on('fullscreenchange', function () {
-      if (placeholder && player.hasClass('vjs-fullscreen')) {
+      if (placeholder && !player.isFullscreen()) {
         player.el_.style.display = 'block';
         placeholder.remove();
       }
-    })
+    });
 
   }
 
